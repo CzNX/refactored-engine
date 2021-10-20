@@ -12,10 +12,12 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/dist/client/router";
 import { useRecoilState } from "recoil";
 import { modalSatete } from "../atoms/modalAtom";
+import { searchState } from "../atoms/searchAtom";
 const Header = () => {
   const router = useRouter();
 
   const [open, setOpen] = useRecoilState(modalSatete);
+  const [search, setSearch] = useRecoilState(searchState);
 
   const { data: session, status } = useSession();
   return (
@@ -55,7 +57,7 @@ const Header = () => {
 
             <input
               type="text"
-              placeholder="search"
+              placeholder="enter username ..."
               className="bg-gray-50 block w-full pl-10
             focus:ring-black
             focus:border-black
@@ -63,6 +65,7 @@ const Header = () => {
             border-gray-300
             rounded-md
             "
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </div>

@@ -1,9 +1,12 @@
 import { collection, onSnapshot, orderBy, query } from "@firebase/firestore";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { searchState } from "../atoms/searchAtom";
 import { db } from "../firebase";
 import Post from "./Post";
 const Posts = () => {
   const [posts, setpost] = useState([]);
+  const value = useRecoilValue(searchState);
   const Dummy = [
     {
       id: "123",
@@ -34,16 +37,18 @@ const Posts = () => {
 
   return (
     <div>
-      {posts.map((post) => (
-        <Post
-          key={post.id}
-          id={post.id}
-          uname={post.data().username}
-          uimg={post.data().profile}
-          img={post.data().image}
-          caption={post.data().caption}
-        />
-      ))}
+      {posts
+        .filter((post) => post.data().username.includes(value))
+        .map((post) => (
+          <Post
+            key={post.id}
+            id={post.id}
+            uname={post.data().username}
+            uimg={post.data().profile}
+            img={post.data().image}
+            caption={post.data().caption}
+          />
+        ))}
     </div>
   );
 };
